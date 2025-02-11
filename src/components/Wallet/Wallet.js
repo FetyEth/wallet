@@ -29,6 +29,12 @@ import Deposit from './Deposit/Deposit'
 import Gas from './Gas/Gas'
 
 export default function Wallet(props) {
+  const visualEnv =
+  process.env.REACT_APP_VISUAL_ENV === 'dev'
+    ? 'dev'
+    : new URL(document.URL).pathname.startsWith('/staging/')
+    ? 'staging'
+    : null
   const { showModal } = useModals()
   const { isClipboardGranted, isNoticationsGranted, arePermissionsLoaded, modalHidden } =
     usePermissions()
@@ -256,7 +262,7 @@ export default function Wallet(props) {
     const used = props.rewardsData?.rewards.extensionKey?.used
     const rewardsAccountAddr = props.rewardsData?.rewards.accountAddr
 
-    if (rewardsAccountAddr !== account.id) return
+    if (rewardsAccountAddr !== account.id || visualEnv === 'dev' || visualEnv === 'staging') return
 
     showModal(<MigrationModal inviteCode={!used && key ? key : null} />, {
       disableClose: true
@@ -326,7 +332,7 @@ export default function Wallet(props) {
       />
 
       <div id="wallet-container" className={dapModeSidebar ? 'dapp-mode' : ''}>
-        <TopBar {...props} />
+        <TopBar visualEnv={visualEnv} {...props} />
         <div id="wallet-container-inner" ref={walletContainerInner}>
           <Suspense fallback={<Loading />}>
             <Switch>

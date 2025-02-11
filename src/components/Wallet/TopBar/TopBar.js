@@ -39,7 +39,8 @@ const TopBar = ({
   addRequest,
   userSorting,
   setUserSorting,
-  dappsCatalog
+  dappsCatalog,
+  visualEnv
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
   const routeMatch = useRouteMatch('/wallet/dapps')
@@ -59,13 +60,6 @@ const TopBar = ({
     () => blockies.create({ seed: account ? account.id : null }).toDataURL(),
     [account]
   )
-
-  const visualEnv =
-    process.env.REACT_APP_VISUAL_ENV === 'dev'
-      ? 'dev'
-      : new URL(document.URL).pathname.startsWith('/staging/')
-      ? 'staging'
-      : null
 
   return (
     <>
